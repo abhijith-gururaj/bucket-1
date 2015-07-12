@@ -6,7 +6,7 @@ Link sharing on sterioids, built as a learning experience with:
 * Clusterpoint 
 * node.js
 
-This app was built at the Angel Hack Vizag 2015, Hackathon.
+This app was built at the Angel Hack Vizag 2015 Hackathon.
 
 ### Team
 Abhijith (Team Lead), Akhil Pandey,Sai Teja, Om (Ethcelon)  
