@@ -40,18 +40,6 @@ r.get('/signup', function(req, res) {
         res.send(data.toString());
 });
 
-r.get('/*', function(req, res) {
-        var retrieve_req = new cps.RetrieveRequest("qwerty");
-        conn1.sendRequest(retrieve_req, function (err, retrieve_resp) {
-       if (err) {
-        return console.log(err);
-       }
-       else {
-         var data =    
-       }       
-    });
-});
-
 r.post('/controller/login', function(req, res) {
         var username = req.body.email;
         var password = req.body.password;
