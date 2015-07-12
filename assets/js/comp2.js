@@ -297,15 +297,7 @@ var ViewMode = React.createClass({
 
 var Controller = React.createClass({
     getInitialState: function() {
-        return {
-            data: [{
-                "url" : "http://www.google.com",
-                "meta" : "metaaaa",
-                }],
-            title : "qwerty",
-            bucket_id : false,
-            editmode : true,
-        };
+        return jaffa;
     },
 
     render: function() {

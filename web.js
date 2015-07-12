@@ -1,16 +1,23 @@
 var React = require('react');
 var express = require('express');
+var s = require("swig");
 var path = require('path');
 var fs = require('fs');
-var bcrypt
+var bcrypt = require('bcrypt');
+var cps = require('cps-api');
+var conn = new cps.Connection('tcp://cloud-eu-0.clusterpoint.com:9007', 'login', 'akhilhector.1@gmail.com', 'eatsleepcode123!@#', 'document', 'document/id', {account: 1320});
+var conn1 = new cps.Connection('tcp://cloud-eu-0.clusterpoint.com:9007', 'bucket', 'akhilhector.1@gmail.com', 'eatsleepcode123!@#', 'document', 'document/id', {account: 1320});
+var app = require('./app');
 var errorPage = fs.readFileSync("./404.html");
 require('node-jsx').install();
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var port = process.env.PORT || 5000; 
+var tmpl = s.compileFile('views/finalOutput.html');
 var app = express();
 var r = express.Router();
+var salt = bcrypt.genSaltSync(10);
 
 app.use(express.static('assets'));
 app.set('title', "Bucket Sharing");
@@ -19,7 +26,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 r.get('/', function(req, res) {
-        var data = fs.readFileSync("index.html", "utf-8");
+        var data = fs.readFileSync("views/finalOutput.html", "utf-8");
         res.send(data.toString());
 });
 
@@ -33,9 +40,22 @@ r.get('/signup', function(req, res) {
         res.send(data.toString());
 });
 
+r.get('/*', function(req, res) {
+        var retrieve_req = new cps.RetrieveRequest("qwerty");
+        conn1.sendRequest(retrieve_req, function (err, retrieve_resp) {
+       if (err) {
+        return console.log(err);
+       }
+       else {
+         var data =    
+       }       
+    });
+});
+
 r.post('/controller/login', function(req, res) {
         var username = req.body.email;
         var password = req.body.password;
+        var hash = bcrypt.compareSync(password, salt);
         var html = 'Hello: ' + username + '.<br>' +
                    'Your Password' + password  + '.<br>' +                                         '<a href="/">Try again.</a>';
         res.send(html);
@@ -46,13 +66,37 @@ r.post('/controller/signup', function(req, res) {
         var email = req.body.email;
         var pwd = req.body.password;
         var confirm_pwd = req.body.password_confirm;
-        var html = 'Email: ' + email + '.<br>' +
-                  'Your Password' + pwd  + '.<br>' +                                           '<a href="/signup">Try again.</a>';
+        var hash = bcrypt.hashSync(pwd, salt);
+        var obj = {
+           id: 1,
+           uname: username,
+           emailid: email,
+           password: pwd,
+           hashsum: hash 
+        };
+        var obj1 = {
+            uname: username,
+            emailid: email,
+            data: [{
+                "url" : "http://www.google.com",
+                "meta" : "metaaaa",
+                }],
+            title : "qwerty",
+            id : "qwerty"
+        };
+        conn.sendRequest(new cps.InsertRequest(obj), function (err, resp) {
+           if (err) return console.error(err); 
+        });
+
+        conn1.sendRequest(new cps.InsertRequest(obj1), function(err, resp) {
+           if (err) return console.error(err); 
+        });
+        var html = 'Thankyou';
         res.send(html);
 });
 
 r.get('*', function(req, res) {
-        var match = 'assets/templates' + req.params[0]+ ".html";
+        var match = '/' + req.params[0]+ ".html";
         fs.exists(match, function(exists) {
                 if(exists) {
                         fs.readFile(match, function(err, d) {
