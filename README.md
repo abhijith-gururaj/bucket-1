@@ -1,15 +1,13 @@
-bucket
+B : Bucket
 ======
+Link sharing on sterioids, built as a learning experience with: 
 
-This is basically a link sharing web application that uses the clusterpoint DBaaS as the backend and technologies involved are : 
-
-* React Js 
+* react.js 
 * Clusterpoint 
-* Node Js
+* node.js
 
-### Approach
-Essentially we are using the database for powering the entire application to maintain the instance of the links. The bigger picture for the application would be managing redundant instances of the same links to some sort of a cache mechanism.
+This app was built at the Angel Hack Vizag 2015, Hackathon.
 
 ### Team
-Om, Sai teja, Abhijith, Akhil
+Abhijith (Team Lead), Akhil Pandey,Sai Teja, Om (Ethcelon)  
 
